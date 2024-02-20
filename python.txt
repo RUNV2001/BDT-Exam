@@ -1,0 +1,84 @@
+class Book:
+    def __init__(self, title, author, isbn, publication_year):
+        self.title = title
+        self.author = author
+        self.isbn = isbn
+        self.publication_year = publication_year
+        self.status = 'available'
+
+    def __str__(self):
+        return f"{self.title} by {self.author} ({self.publication_year})"
+
+
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def remove_book(self, book):
+        self.books.remove(book)
+
+    def borrow_book(self, title):
+        for book in self.books:
+            if book.title.lower() == title.lower() and book.status == 'available':
+                book.status = 'borrowed'
+                return True
+        return False
+
+    def return_book(self, title):
+        for book in self.books:
+            if book.title.lower() == title.lower() and book.status == 'borrowed':
+                book.status = 'available'
+                return True
+        return False
+
+    def search_books(self, keyword):
+        result = []
+        for book in self.books:
+            if (keyword.lower() in book.title.lower()) or (keyword.lower() in book.author.lower()) or (
+                    keyword.lower() == str(book.publication_year)):
+                result.append(book)
+        return result
+
+
+# Sample usage
+library = Library()
+
+book1 = Book("Python Programming", "John Smith", "1234567890", 2020)
+book2 = Book("Java Basics", "Alice Johnson", "0987654321", 2019)
+book3 = Book("C++ Crash Course", "Bob Brown", "5678901234", 2021)
+
+library.add_book(book1)
+library.add_book(book2)
+library.add_book(book3)
+
+print("Books available in the library:")
+for book in library.books:
+    print(book)
+
+print("\nBorrowing a book...")
+if library.borrow_book("Python Programming"):
+    print("Book borrowed successfully.")
+else:
+    print("Book not available.")
+
+print("\nBooks available in the library after borrowing:")
+for book in library.books:
+    print(book)
+
+print("\nReturning a book...")
+if library.return_book("Python Programming"):
+    print("Book returned successfully.")
+else:
+    print("Book was not borrowed or not found.")
+
+print("\nBooks available in the library after returning:")
+for book in library.books:
+    print(book)
+
+print("\nSearching for books by keyword 'Python':")
+search_results = library.search_books("Python")
+for book in search_results:
+    print(book)
